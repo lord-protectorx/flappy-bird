@@ -26,8 +26,7 @@ def load_image(name, color_key=None):
 
 class Bird(pygame.sprite.Sprite):
     image = load_image("bird.png", -1)
-    speed_down = 2
-    potential = 0
+    gravity = 0.5
 
     def __init__(self):
         super().__init__(all_sprites)
@@ -36,21 +35,16 @@ class Bird(pygame.sprite.Sprite):
 
         self.mask = pygame.mask.from_surface(self.image)
 
-        self.rect.bottom = height
-
         self.rect.x = 283
         self.rect.y = 288
+        self.speed = 0
 
     def update(self):
-        if self.potential > 0:
-            self.rect = self.rect.move(0, -10)
-            self.potential -= 10
-        else:
-            self.rect = self.rect.move(0, self.speed_down)
-            print(self.speed_down)
+        self.speed += Bird.gravity
+        self.rect = self.rect.move(0, self.speed)
 
     def jump(self):
-        self.potential = 70
+        self.speed = -13
 
 
 all_sprites = pygame.sprite.Group()
