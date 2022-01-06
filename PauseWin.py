@@ -11,26 +11,26 @@ def load_image(name, colorkey=None):
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
-    image = pygame.image.load(fullname)
+    image = pygame.image.load(fullname).convert_alpha()
     return image
 
 
 size = width, height = 256, 256
+btn_size = 90
 screen = pygame.display.set_mode(size)
-screen.blit(load_image("background.png"), (0, 0))
 all_sprites = pygame.sprite.Group()
 
 
 class Home(pygame.sprite.Sprite):
     image = load_image("home_button.png")
-    image2 = pygame.transform.scale(image, (80, 80))
+    image_hover = load_image("home_button_hover.png")
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Home.image2
+        self.image = Home.image
         self.rect = self.image.get_rect()
-        self.rect.x = 30
+        self.rect.x = (width - (btn_size * 2)) / 3
         self.rect.y = 30
 
     def update(self, *args):
@@ -38,37 +38,47 @@ class Home(pygame.sprite.Sprite):
                 self.rect.collidepoint(args[0].pos):
             Home.flag = True
             print('home')
+        if args and args[0].type == pygame.MOUSEMOTION:
+            if (self.rect.collidepoint(args[0].pos)):
+                self.image = Home.image_hover
+            else:
+                self.image = Home.image
 
 
 class Reset(pygame.sprite.Sprite):
     image = load_image("reset_button.png")
-    image2 = pygame.transform.scale(image, (70, 70))
+    image_hover = load_image("reset_button_hover.png")
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Reset.image2
+        self.image = Reset.image
         self.rect = self.image.get_rect()
-        self.rect.x = 140
-        self.rect.y = 35
+        self.rect.x = (width - (btn_size * 2)) / 3 * 2 + btn_size
+        self.rect.y = 30
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
             Reset.flag = True
             print('Reset')
+        if args and args[0].type == pygame.MOUSEMOTION:
+            if (self.rect.collidepoint(args[0].pos)):
+                self.image = Reset.image_hover
+            else:
+                self.image = Reset.image
 
 
 class Continue(pygame.sprite.Sprite):
     image = load_image("next-button.png")
-    image2 = pygame.transform.scale(image, (80, 80))
+    image_hover = load_image("next-button-hover.png")
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Continue.image2
+        self.image = Continue.image
         self.rect = self.image.get_rect()
-        self.rect.x = 80
+        self.rect.x = (width - btn_size) / 2
         self.rect.y = 120
 
     def update(self, *args):
@@ -76,6 +86,11 @@ class Continue(pygame.sprite.Sprite):
                 self.rect.collidepoint(args[0].pos):
             Continue.flag = True
             print('continue')
+        if args and args[0].type == pygame.MOUSEMOTION:
+            if (self.rect.collidepoint(args[0].pos)):
+                self.image = Continue.image_hover
+            else:
+                self.image = Continue.image
 
 
 clock = pygame.time.Clock()
@@ -87,8 +102,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            all_sprites.update(event)
+        all_sprites.update(event)
+    screen.blit(load_image("background.png"), (0, 0))
     all_sprites.draw(screen)
     pygame.display.flip()
     clock.tick(60)
