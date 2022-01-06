@@ -11,14 +11,13 @@ def load_image(name, colorkey=None):
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
-    image = pygame.image.load(fullname)
+    image = pygame.image.load(fullname).convert_alpha()
     return image
 
 
 size = width, height = 256, 256
 btn_size = 70
 screen = pygame.display.set_mode(size)
-screen.blit(load_image("background.png"), (0, 0))
 all_sprites = pygame.sprite.Group()
 
 
@@ -87,6 +86,7 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             all_sprites.update(event)
+    screen.blit(load_image("background.png"), (0, 0))
     all_sprites.draw(screen)
     pygame.display.flip()
     clock.tick(60)
