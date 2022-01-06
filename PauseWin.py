@@ -16,6 +16,7 @@ def load_image(name, colorkey=None):
 
 
 size = width, height = 256, 256
+btn_size = 70
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("background.png"), (0, 0))
 all_sprites = pygame.sprite.Group()
@@ -23,14 +24,13 @@ all_sprites = pygame.sprite.Group()
 
 class Home(pygame.sprite.Sprite):
     image = load_image("home_button.png")
-    image2 = pygame.transform.scale(image, (80, 80))
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Home.image2
+        self.image = Home.image
         self.rect = self.image.get_rect()
-        self.rect.x = 30
+        self.rect.x = (width - (btn_size * 2)) / 3
         self.rect.y = 30
 
     def update(self, *args):
@@ -42,15 +42,14 @@ class Home(pygame.sprite.Sprite):
 
 class Reset(pygame.sprite.Sprite):
     image = load_image("reset_button.png")
-    image2 = pygame.transform.scale(image, (70, 70))
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Reset.image2
+        self.image = Reset.image
         self.rect = self.image.get_rect()
-        self.rect.x = 140
-        self.rect.y = 35
+        self.rect.x = (width - (btn_size * 2)) / 3 * 2 + 70
+        self.rect.y = 30
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
@@ -61,14 +60,13 @@ class Reset(pygame.sprite.Sprite):
 
 class Continue(pygame.sprite.Sprite):
     image = load_image("next-button.png")
-    image2 = pygame.transform.scale(image, (80, 80))
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Continue.image2
+        self.image = Continue.image
         self.rect = self.image.get_rect()
-        self.rect.x = 80
+        self.rect.x = (width - btn_size) / 2
         self.rect.y = 120
 
     def update(self, *args):
