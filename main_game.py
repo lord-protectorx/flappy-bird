@@ -76,26 +76,8 @@ btn_size = 205
 all_sprites = pygame.sprite.Group()
 
 
-class Hard(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("hard_button.png"), (205, 85))
-    flag = False
-
-    def __init__(self, group):
-        super().__init__(group)
-        self.image = Hard.image
-        self.rect = self.image.get_rect()
-        self.rect.x = (width / 2) - btn_size / 2
-        self.rect.y = 200
-
-    def update(self, *args):
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
-                self.rect.collidepoint(args[0].pos):
-            Hard.flag = True
-            print('easy')
-
-
 class Easy(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("easy_button.png"), (205, 85))
+    image = pygame.transform.scale(load_image("hard_button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
@@ -103,13 +85,29 @@ class Easy(pygame.sprite.Sprite):
         self.image = Easy.image
         self.rect = self.image.get_rect()
         self.rect.x = (width / 2) - btn_size / 2
-        self.rect.y = 300
+        self.rect.y = 200
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
             Easy.flag = True
-            print('hard')
+
+
+class Hard(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("easy_button.png"), (205, 85))
+    flag = False
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Hard.image
+        self.rect = self.image.get_rect()
+        self.rect.x = (width / 2) - btn_size / 2
+        self.rect.y = 300
+
+    def update(self, *args):
+        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos):
+            Hard.flag = True
 
 
 def choose_win():
