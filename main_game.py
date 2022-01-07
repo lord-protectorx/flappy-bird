@@ -104,25 +104,8 @@ def start_screen():
         clock.tick(FPS)
 
 
-class Easy(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("hard_button.png"), (205, 85))
-    flag = False
-
-    def __init__(self, group):
-        super().__init__(group)
-        self.image = Easy.image
-        self.rect = self.image.get_rect()
-        self.rect.x = (width / 2) - btn_size / 2
-        self.rect.y = 200
-
-    def update(self, *args):
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
-                self.rect.collidepoint(args[0].pos):
-            Easy.flag = True
-
-
 class Hard(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("easy_button.png"), (205, 85))
+    image = pygame.transform.scale(load_image("hard_button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
@@ -130,12 +113,29 @@ class Hard(pygame.sprite.Sprite):
         self.image = Hard.image
         self.rect = self.image.get_rect()
         self.rect.x = (width / 2) - btn_size / 2
-        self.rect.y = 300
+        self.rect.y = 200
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
             Hard.flag = True
+
+
+class Easy(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("easy_button.png"), (205, 85))
+    flag = False
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Easy.image
+        self.rect = self.image.get_rect()
+        self.rect.x = (width / 2) - btn_size / 2
+        self.rect.y = 300
+
+    def update(self, *args):
+        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos):
+            Easy.flag = True
 
 
 def choose_win():
@@ -166,13 +166,6 @@ back_age2 = pygame.transform.scale(back_age1, (600, 600))
 plat_age = pygame.transform.scale(load_image("base.png"), (336, 56))
 pos_x = 0
 pipe_per = 150
-if Hard.flag and not Easy.flag:
-    speed = 3
-    pipe_range = 1300
-else:
-    speed = 6
-    pipe_range = 800
-last_pipe = pygame.time.get_ticks() - pipe_range
 
 
 class Bird(pygame.sprite.Sprite):
@@ -222,12 +215,13 @@ class Bird(pygame.sprite.Sprite):
 
 
 class Pipe(pygame.sprite.Sprite):
-    def __init__(self, posis, x, y, *group):
+    def __init__(self, posis, x, y, speed, *group):
         super().__init__(*group)
         self.image = pygame.transform.scale2x(load_image("pipe_up.png"))
         self.rect = self.image.get_rect()
         # создаем маску
         self.mask = pygame.mask.from_surface(self.image)
+        self.speed = speed
 
         if posis == 1:  # top
             self.image = pygame.transform.flip(self.image, False, True)
@@ -236,7 +230,7 @@ class Pipe(pygame.sprite.Sprite):
             self.rect.topleft = [x, y + int(pipe_per / 2)]
 
     def update(self):
-        self.rect.x -= speed
+        self.rect.x -= self.speed
         if self.rect.right < 0:
             self.kill()
 
@@ -245,6 +239,15 @@ def main_game():
     global count, pos_x, last_pipe
     bird = Bird()
     running = True
+    if Hard.flag and not Easy.flag:
+        speed = 6
+        pipe_range = 800
+        print('hard')
+    else:
+        speed = 3
+        pipe_range = 1300
+        print('easy')
+    last_pipe = pygame.time.get_ticks() - pipe_range
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -262,8 +265,8 @@ def main_game():
             pipe_heig = random.randint(-90, 90)
             y_pos = 300 + pipe_heig
             x_pos = 600
-            Pipe(-1, x_pos, y_pos, pipe_group)
-            Pipe(1, x_pos, y_pos, pipe_group)
+            Pipe(-1, x_pos, y_pos, speed, pipe_group)
+            Pipe(1, x_pos, y_pos, speed, pipe_group)
             last_pipe = now_time
             count += 1
 
