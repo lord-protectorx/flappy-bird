@@ -37,7 +37,7 @@ last_pipe = pygame.time.get_ticks() - pipe_range
 
 class Bird(pygame.sprite.Sprite):
     image = load_image("bird.png", -1)
-    gravity = 0.7
+    gravity = 0.6
     flag = True
 
     def __init__(self):
@@ -58,7 +58,7 @@ class Bird(pygame.sprite.Sprite):
             self.flag = False
 
     def jump(self):
-        self.speed = -8 
+        self.speed = -8
 
 
 class Pipe(pygame.sprite.Sprite):
@@ -81,9 +81,10 @@ class Pipe(pygame.sprite.Sprite):
             self.kill()
 
 
+f1 = pygame.font.Font('data/Flappy-Bird.ttf', 50)
 bird_group = pygame.sprite.Group()
 bird = Bird()
-
+count = 0
 pipe_group = pygame.sprite.Group()
 running = True
 while running:
@@ -106,6 +107,7 @@ while running:
         btm_pipe = Pipe(-1, pipe_group)
         top_pipe = Pipe(1, pipe_group)
         last_pipe = Now_time
+        count += 1
 
     draw_platform()
     if pos_x <= -72:
@@ -117,7 +119,9 @@ while running:
         running = False
     if pygame.sprite.groupcollide(bird_group, pipe_group, False, False):
         running = False
+    if count - 2 >= 0:
+        text1 = f1.render(f'{count - 2}', True, (255, 255, 255))
+        screen.blit(text1, (300, 50))
     pygame.display.flip()
     clock.tick(60)
-
 pygame.quit()
