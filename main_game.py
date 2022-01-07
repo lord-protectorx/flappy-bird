@@ -22,6 +22,22 @@ def load_image(name, colorkey=None):
     return image
 
 
+def load_image_bird(name, color_key=None):
+    fullname = os.path.join('data', name)
+    try:
+        image = pygame.image.load(fullname).convert()
+    except pygame.error as message:
+        print('Cannot load image:', name)
+        raise SystemExit(message)
+    if color_key is not None:
+        if color_key == -1:
+            color_key = image.get_at((0, 0))
+        image.set_colorkey(color_key)
+    else:
+        image = image.convert_alpha()
+    return image
+
+
 def terminate():
     pygame.quit()
     sys.exit()
@@ -137,10 +153,10 @@ last_pipe = pygame.time.get_ticks() - pipe_range
 
 
 class Bird(pygame.sprite.Sprite):
-    image = load_image("bird.png", -1)
+    image = load_image_bird("bird.png", -1)
     gravity = 0.6
     flag = True
-    sheet = load_image("birds.png", -1)
+    sheet = load_image_bird("birds.png", -1)
     columns = 3
     rows = 1
     counter = int()
