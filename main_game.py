@@ -249,14 +249,15 @@ while running:
     if pos_x <= -72:
         pos_x = 0
 
+    score = count - 2
     bird_group.draw(screen)
     bird_group.update()
     if not bird.flag:
         running = False
     if pygame.sprite.groupcollide(bird_group, pipe_group, False, False):
         running = False
-    if count - 2 >= 0:
-        text1 = f1.render(f'{count - 2}', True, (255, 255, 255))
+    if score >= 0:
+        text1 = f1.render(f'{score}', True, (255, 255, 255))
         screen.blit(text1, (300, 50))
     pygame.display.flip()
     clock.tick(60)

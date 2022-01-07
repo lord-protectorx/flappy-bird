@@ -16,4 +16,3 @@ else:
     file = open('./data/best_score.txt', 'w', encoding="utf-8")
     file.write(str(score))
     file.close()
-    print(file, 'FD')
