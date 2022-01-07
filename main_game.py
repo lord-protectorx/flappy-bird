@@ -142,11 +142,11 @@ plat_age = pygame.transform.scale(load_image("base.png"), (336, 56))
 pos_x = 0
 pipe_per = 150
 if Hard.flag and not Easy.flag:
-    speed = 2
-    pipe_range = 1500
+    speed = 3
+    pipe_range = 1300
 else:
     speed = 6
-    pipe_range = 1000
+    pipe_range = 800
 last_pipe = pygame.time.get_ticks() - pipe_range
 
 
@@ -184,7 +184,10 @@ class Bird(pygame.sprite.Sprite):
             self.flag = False
 
     def jump(self):
-        self.speed = -9
+        if Hard.flag and not Easy.flag:
+            self.speed = -9
+        else:
+            self.speed = -11
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
