@@ -145,8 +145,8 @@ if Hard.flag and not Easy.flag:
     speed = 2
     pipe_range = 1500
 else:
-    speed = 4
-    pipe_range = 1200
+    speed = 6
+    pipe_range = 1000
 last_pipe = pygame.time.get_ticks() - pipe_range
 
 
@@ -184,7 +184,7 @@ class Bird(pygame.sprite.Sprite):
             self.flag = False
 
     def jump(self):
-        self.speed = -8
+        self.speed = -12
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
