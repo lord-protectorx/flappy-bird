@@ -51,7 +51,7 @@ def start_screen():
     font = pygame.font.Font('data/Flappy-Bird.ttf', 40)
     text_coord = 250
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('white'))
+        string_rendered = font.render(line, True, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
         text_coord += 10
         intro_rect.top = text_coord
