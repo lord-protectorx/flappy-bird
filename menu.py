@@ -75,19 +75,27 @@ class Bird(pygame.sprite.Sprite):
     image = load_image("bird.png", -1)
     gravity = 0.6
     flag = True
+    sheet = load_image("birds.png", -1)
+    columns = 3
+    rows = 1
 
     def __init__(self):
         super().__init__(bird_group)
-        self.image = Bird.image
         self.rect = self.image.get_rect()
-        # создаем маски
-
+        self.frames = []
+        self.cut_sheet(self.sheet, self.columns, self.rows)
+        self.cur_frame = 0
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.image.get_rect()
         self.rect.x = 283
         self.rect.y = 288
         self.speed = 0
 
     def update(self):
-        if not pygame.sprite.collide_mask(self, btm_pipe) and not pygame.sprite.collide_mask(self, top_pipe) and self.flag:
+        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+        self.image = self.frames[self.cur_frame]
+        if not pygame.sprite.collide_mask(self, btm_pipe) and not pygame.sprite.collide_mask(self,
+                                                                                               top_pipe) and self.flag:
             self.speed += Bird.gravity
             self.rect = self.rect.move(0, self.speed)
         if self.rect.y > 530 or self.rect.y < 5:
@@ -95,6 +103,13 @@ class Bird(pygame.sprite.Sprite):
 
     def jump(self):
         self.speed = -8
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(frame_location, self.rect.size)))
 
 
 class Pipe(pygame.sprite.Sprite):
