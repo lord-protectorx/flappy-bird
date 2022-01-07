@@ -184,7 +184,7 @@ class Bird(pygame.sprite.Sprite):
             self.flag = False
 
     def jump(self):
-        self.speed = -12
+        self.speed = -9
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
