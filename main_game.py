@@ -13,6 +13,7 @@ screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 f1 = pygame.font.Font('data/Flappy-Bird.ttf', 50)
 btn_size = 205
+count = 0
 all_sprites = pygame.sprite.Group()
 bird_group = pygame.sprite.Group()
 pipe_group = pygame.sprite.Group()
@@ -140,14 +141,14 @@ class Hard(pygame.sprite.Sprite):
 def choose_win():
     background1 = pygame.transform.chop(load_image("background_win.png"), (0, 300, 300, 0))
     background2 = pygame.transform.scale(background1, (600, 600))
-    hard = Hard(all_sprites)
-    easy = Easy(all_sprites)
+    Hard(all_sprites)
+    Easy(all_sprites)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif Easy.flag or Hard.flag:
-                return
+                main_game()
             all_sprites.update(event)
         screen.blit(background2, (0, 0))
         all_sprites.draw(screen)
@@ -239,9 +240,9 @@ class Pipe(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
-
 def main_game():
     global count, pos_x, last_pipe
+    bird = Bird()
     running = True
     while running:
         for event in pygame.event.get():
