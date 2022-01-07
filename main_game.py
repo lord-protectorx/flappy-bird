@@ -19,7 +19,7 @@ bird_group = pygame.sprite.Group()
 pipe_group = pygame.sprite.Group()
 
 
-def load_image(name, colorkey=None):
+def load_image(name):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
     if not os.path.isfile(fullname):
@@ -240,6 +240,7 @@ class Pipe(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
+
 def main_game():
     global count, pos_x, last_pipe
     bird = Bird()
@@ -256,14 +257,14 @@ def main_game():
 
         pipe_group.update()
         pipe_group.draw(screen)
-        Now_time = pygame.time.get_ticks()
-        if Now_time - last_pipe > pipe_range:
+        now_time = pygame.time.get_ticks()
+        if now_time - last_pipe > pipe_range:
             pipe_heig = random.randint(-90, 90)
             y_pos = 300 + pipe_heig
             x_pos = 600
-            btm_pipe = Pipe(-1, x_pos, y_pos, pipe_group)
-            top_pipe = Pipe(1, x_pos, y_pos, pipe_group)
-            last_pipe = Now_time
+            Pipe(-1, x_pos, y_pos, pipe_group)
+            Pipe(1, x_pos, y_pos, pipe_group)
+            last_pipe = now_time
             count += 1
 
         draw_platform()
@@ -283,7 +284,8 @@ def main_game():
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()
-
 # истсинный игровой цикл
+
+
 start_screen()
 # main_game()
