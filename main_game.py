@@ -142,8 +142,8 @@ plat_age = pygame.transform.scale(load_image("base.png"), (336, 56))
 pos_x = 0
 pipe_per = 150
 if Hard.flag and not Easy.flag:
-    speed = 2
-    pipe_range = 1500
+    speed = 3
+    pipe_range = 1400
 else:
     speed = 6
     pipe_range = 1000
@@ -184,7 +184,7 @@ class Bird(pygame.sprite.Sprite):
             self.flag = False
 
     def jump(self):
-        self.speed = -12
+        self.speed = -11
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
@@ -198,6 +198,7 @@ class Pipe(pygame.sprite.Sprite):
     def __init__(self, posis, *group):
         super().__init__(*group)
         self.image = pygame.transform.scale2x(load_image("pipe_up.png"))
+        self.rect = self.image.get_rect()
         self.rect = self.image.get_rect()
         # создаем маску
         self.mask = pygame.mask.from_surface(self.image)
