@@ -15,97 +15,63 @@ def load_image(name, colorkey=None):
     return image
 
 
-size = width, height = 256, 256
-btn_size = 90
+size = width, height = 600, 600
+btn_size = 205
 screen = pygame.display.set_mode(size)
 all_sprites = pygame.sprite.Group()
 
 
-class Home(pygame.sprite.Sprite):
-    image = load_image("home_button.png")
-    image_hover = load_image("home_button_hover.png")
+class Hard(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("home_button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Home.image
+        self.image = Hard.image
         self.rect = self.image.get_rect()
-        self.rect.x = (width - (btn_size * 2)) / 3
-        self.rect.y = 30
+        self.rect.x = (width / 2) - btn_size / 2
+        self.rect.y = 200
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
-            Home.flag = True
-            print('home')
-        if args and args[0].type == pygame.MOUSEMOTION:
-            if (self.rect.collidepoint(args[0].pos)):
-                self.image = Home.image_hover
-            else:
-                self.image = Home.image
+            Hard.flag = True
+            print('easy')
 
 
-class Reset(pygame.sprite.Sprite):
-    image = load_image("reset_button.png")
-    image_hover = load_image("reset_button_hover.png")
+class Easy(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("reset_button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
-        self.image = Reset.image
+        self.image = Easy.image
         self.rect = self.image.get_rect()
-        self.rect.x = (width - (btn_size * 2)) / 3 * 2 + btn_size
-        self.rect.y = 30
+        self.rect.x = (width / 2) - btn_size / 2
+        self.rect.y = 300
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
-            Reset.flag = True
-            print('Reset')
-        if args and args[0].type == pygame.MOUSEMOTION:
-            if (self.rect.collidepoint(args[0].pos)):
-                self.image = Reset.image_hover
-            else:
-                self.image = Reset.image
+            Easy.flag = True
+            print('hard')
 
 
-class Continue(pygame.sprite.Sprite):
-    image = load_image("next-button.png")
-    image_hover = load_image("next-button-hover.png")
-    flag = False
-
-    def __init__(self, group):
-        super().__init__(group)
-        self.image = Continue.image
-        self.rect = self.image.get_rect()
-        self.rect.x = (width - btn_size) / 2
-        self.rect.y = 120
-
-    def update(self, *args):
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
-                self.rect.collidepoint(args[0].pos):
-            Continue.flag = True
-            print('continue')
-        if args and args[0].type == pygame.MOUSEMOTION:
-            if (self.rect.collidepoint(args[0].pos)):
-                self.image = Continue.image_hover
-            else:
-                self.image = Continue.image
-
-
-clock = pygame.time.Clock()
-running = True
-Home(all_sprites)
-Reset(all_sprites)
-Continue(all_sprites)
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        all_sprites.update(event)
-    screen.blit(load_image("background.png"), (0, 0))
-    all_sprites.draw(screen)
-    pygame.display.flip()
-    clock.tick(60)
-
-pygame.quit()
+def choose_win():
+    back_age1 = pygame.transform.chop(load_image("background_win.png"), (0, 300, 300, 0))
+    back_age2 = pygame.transform.scale(back_age1, (600, 600))
+    clock = pygame.time.Clock()
+    running = True
+    Hard(all_sprites)
+    Easy(all_sprites)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif Easy.flag or Hard.flag:
+                return
+            all_sprites.update(event)
+        screen.blit(back_age2, (0, 0))
+        all_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(60)

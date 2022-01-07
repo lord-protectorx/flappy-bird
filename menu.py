@@ -53,7 +53,68 @@ def start_screen():
         pygame.display.flip()
         clock.tick(FPS)
 
+
 start_screen()
+
+btn_size = 205
+all_sprites = pygame.sprite.Group()
+
+
+class Hard(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("home_button.png"), (205, 85))
+    flag = False
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Hard.image
+        self.rect = self.image.get_rect()
+        self.rect.x = (width / 2) - btn_size / 2
+        self.rect.y = 200
+
+    def update(self, *args):
+        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos):
+            Hard.flag = True
+            print('easy')
+
+
+class Easy(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("reset_button.png"), (205, 85))
+    flag = False
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Easy.image
+        self.rect = self.image.get_rect()
+        self.rect.x = (width / 2) - btn_size / 2
+        self.rect.y = 300
+
+    def update(self, *args):
+        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos):
+            Easy.flag = True
+            print('hard')
+
+
+def choose_win():
+    background1 = pygame.transform.chop(load_image("background_win.png"), (0, 300, 300, 0))
+    background2 = pygame.transform.scale(background1, (600, 600))
+    Hard(all_sprites)
+    Easy(all_sprites)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif Easy.flag or Hard.flag:
+                return
+            all_sprites.update(event)
+        screen.blit(background2, (0, 0))
+        all_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(60)
+
+
+choose_win()
 
 
 def draw_platform():
@@ -66,8 +127,12 @@ back_age2 = pygame.transform.scale(back_age1, (600, 600))
 plat_age = pygame.transform.scale(load_image("base.png"), (336, 56))
 pos_x = 0
 pipe_per = 150
-speed = 2
-pipe_range = 1500
+if Hard.flag and not Easy.flag:
+    speed = 2
+    pipe_range = 1500
+else:
+    speed = 4
+    pipe_range = 1200
 last_pipe = pygame.time.get_ticks() - pipe_range
 
 
