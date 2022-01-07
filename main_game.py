@@ -75,7 +75,6 @@ class Easy(pygame.sprite.Sprite):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
             Easy.flag = True
-            print('easy')
 
 
 class Hard(pygame.sprite.Sprite):
@@ -93,7 +92,6 @@ class Hard(pygame.sprite.Sprite):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
             Hard.flag = True
-            print('hard')
 
 
 def choose_win():
