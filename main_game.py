@@ -143,6 +143,7 @@ class Bird(pygame.sprite.Sprite):
     sheet = load_image("birds.png", -1)
     columns = 3
     rows = 1
+    counter = int()
 
     def __init__(self):
         super().__init__(bird_group)
@@ -157,8 +158,10 @@ class Bird(pygame.sprite.Sprite):
         self.speed = 0
 
     def update(self):
-        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
-        self.image = self.frames[self.cur_frame]
+        if self.counter % 5 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+        self.counter += 1
         if not pygame.sprite.collide_mask(self, btm_pipe) and not pygame.sprite.collide_mask(self,
                                                                                                top_pipe) and self.flag:
             self.speed += Bird.gravity
