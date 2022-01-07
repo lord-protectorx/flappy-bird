@@ -61,7 +61,7 @@ all_sprites = pygame.sprite.Group()
 
 
 class Hard(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("home_button.png"), (205, 85))
+    image = pygame.transform.scale(load_image("hard_button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
@@ -79,7 +79,7 @@ class Hard(pygame.sprite.Sprite):
 
 
 class Easy(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("reset_button.png"), (205, 85))
+    image = pygame.transform.scale(load_image("easy_button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
