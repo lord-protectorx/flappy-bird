@@ -64,9 +64,27 @@ def terminate():
     sys.exit()
 
 
-def gameover_screen(score):
-    intro_text = [f'Score: {score}']
+class Retry(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image("button.png"), (174, 200))
+    flag = False
 
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Retry.image
+        self.rect = self.image.get_rect()
+        self.rect.x = (width / 2) - 174 / 2
+        self.rect.y = 300
+
+    def update(self, *args):
+        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos):
+            self.flag = True
+
+
+def gameover_screen(score):
+    button_sprites = pygame.sprite.Group()
+    intro_text = [f'Score: {score}']
+    retry = Retry(button_sprites)
     fon = pygame.transform.scale(load_image('background_over.png'), (width, height))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font('data/Flappy-Bird.ttf', 40)
@@ -85,9 +103,10 @@ def gameover_screen(score):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or \
-                    event.type == pygame.MOUSEBUTTONDOWN:
+            elif retry.flag:
                 start_screen()  # начинаем игру
+            button_sprites.update(event)
+        button_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -272,11 +291,9 @@ def main_game():
     if hard.flag and not easy.flag:
         speed = 6
         pipe_range = 800
-        print('hard')
     else:
         speed = 3
         pipe_range = 1300
-        print('easy')
     last_pipe = pygame.time.get_ticks() - pipe_range
     while running:
         for event in pygame.event.get():
