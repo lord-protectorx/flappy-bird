@@ -13,10 +13,7 @@ screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 f1 = pygame.font.Font('data/Flappy-Bird.ttf', 50)
 btn_size = 205
-count = 0
-all_sprites = pygame.sprite.Group()
-bird_group = pygame.sprite.Group()
-pipe_group = pygame.sprite.Group()
+
 
 
 def save_res(score):
@@ -90,12 +87,18 @@ def gameover_screen(score):
                 terminate()
             elif event.type == pygame.KEYDOWN or \
                     event.type == pygame.MOUSEBUTTONDOWN:
-                terminate()  # начинаем игру
+                start_screen()  # начинаем игру
         pygame.display.flip()
         clock.tick(FPS)
 
 
 def start_screen():
+    global all_sprites, bird_group, pipe_group, count
+
+    count = 0
+    all_sprites = pygame.sprite.Group()
+    bird_group = pygame.sprite.Group()
+    pipe_group = pygame.sprite.Group()
     fon = pygame.transform.scale(load_image('menu.png'), (width, height))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font('data/Flappy-Bird.ttf', 40)
@@ -144,7 +147,7 @@ class Hard(pygame.sprite.Sprite):
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
-            Hard.flag = True
+            self.flag = True
 
 
 class Easy(pygame.sprite.Sprite):
@@ -161,19 +164,20 @@ class Easy(pygame.sprite.Sprite):
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
                 self.rect.collidepoint(args[0].pos):
-            Easy.flag = True
+            self.flag = True
 
 
 def choose_win():
+    global easy, hard
     background1 = pygame.transform.chop(load_image("background_win.png"), (0, 300, 300, 0))
     background2 = pygame.transform.scale(background1, (600, 600))
-    Hard(all_sprites)
-    Easy(all_sprites)
+    hard = Hard(all_sprites)
+    easy = Easy(all_sprites)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif Easy.flag or Hard.flag:
+            elif easy.flag or hard.flag:
                 main_game()
             all_sprites.update(event)
         screen.blit(background2, (0, 0))
@@ -265,7 +269,7 @@ def main_game():
     global count, pos_x, last_pipe
     bird = Bird()
     running = True
-    if Hard.flag and not Easy.flag:
+    if hard.flag and not easy.flag:
         speed = 6
         pipe_range = 800
         print('hard')
@@ -279,7 +283,7 @@ def main_game():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                Bird.jump(bird)
+                bird.jump()
 
         screen.blit(back_age2, (0, 0))
         pos_x -= speed
@@ -291,8 +295,8 @@ def main_game():
             pipe_heig = random.randint(-90, 90)
             y_pos = 300 + pipe_heig
             x_pos = 600
-            Pipe(-1, x_pos, y_pos, speed, pipe_group)
-            Pipe(1, x_pos, y_pos, speed, pipe_group)
+            pipe_1 = Pipe(-1, x_pos, y_pos, speed, pipe_group)
+            pipe_2 = Pipe(1, x_pos, y_pos, speed, pipe_group)
             last_pipe = now_time
             count += 1
 
@@ -306,6 +310,7 @@ def main_game():
         if not bird.flag:
             gameover_screen(score)
         if pygame.sprite.groupcollide(bird_group, pipe_group, False, False):
+
             gameover_screen(score)
         if score >= 0:
             text1 = f1.render(f'{score}', True, (255, 255, 255))
