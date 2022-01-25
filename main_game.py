@@ -19,6 +19,23 @@ bird_group = pygame.sprite.Group()
 pipe_group = pygame.sprite.Group()
 
 
+def save_res(score):
+    files = os.listdir("./data")
+    if 'best_score.txt' in files:
+        file = open('./data/best_score.txt', 'r', encoding="utf-8")
+        best_score = file.read()
+        if score > int(best_score):
+            best_score = str(score)
+        file.close()
+        file = open('./data/best_score.txt', 'w', encoding="utf-8")
+        file.write(str(best_score))
+        file.close()
+    else:
+        file = open('./data/best_score.txt', 'w', encoding="utf-8")
+        file.write(str(score))
+        file.close()
+
+
 def load_image(name):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
@@ -65,6 +82,7 @@ def gameover_screen(score):
         intro_rect.x = 230
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
+    save_res(score)
 
     while True:
         for event in pygame.event.get():
@@ -78,20 +96,28 @@ def gameover_screen(score):
 
 
 def start_screen():
-    intro_text = ['Best score']
-
     fon = pygame.transform.scale(load_image('menu.png'), (width, height))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font('data/Flappy-Bird.ttf', 40)
     text_coord = 250
-    for line in intro_text:
-        string_rendered = font.render(line, True, pygame.Color('white'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 10
-        intro_rect.top = text_coord
-        intro_rect.x = 230
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
+
+    files = os.listdir("./data")
+    if 'best_score.txt' in files:
+        file = open('./data/best_score.txt', 'r', encoding="utf-8")
+        best_score = file.read()
+        best_score = str(best_score)
+        file.close()
+
+        intro_text = [f'Best score: {best_score}']
+
+        for line in intro_text:
+            string_rendered = font.render(line, True, pygame.Color('white'))
+            intro_rect = string_rendered.get_rect()
+            text_coord += 10
+            intro_rect.top = text_coord
+            intro_rect.x = 205
+            text_coord += intro_rect.height
+            screen.blit(string_rendered, intro_rect)
 
     while True:
         for event in pygame.event.get():
