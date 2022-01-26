@@ -2,6 +2,7 @@ import os
 import pygame
 import sys
 import random
+from score_saver import save_res
 
 pygame.init()
 
