@@ -65,15 +65,15 @@ def terminate():
 
 
 class Retry(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image("button.png"), (174, 200))
+    image = pygame.transform.scale(load_image("button.png"), (205, 85))
     flag = False
 
     def __init__(self, group):
         super().__init__(group)
         self.image = Retry.image
         self.rect = self.image.get_rect()
-        self.rect.x = (width / 2) - 174 / 2
-        self.rect.y = 300
+        self.rect.x = (width / 2) - 205 / 2
+        self.rect.y = 400
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
@@ -339,4 +339,3 @@ def main_game():
 
 
 start_screen()
-# main_game()
